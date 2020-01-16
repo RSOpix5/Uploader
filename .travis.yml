@@ -1,25 +1,38 @@
 sudo: required
-
-services:
-  - docker
-
+branches:
+  only:
+    - master
+    - dev
 language: java
-dist: trusty
-
 jdk:
 - openjdk8
-
+dist: trusty
+services:
+- docker
 cache:
   directories:
-  - $HOME/.m2
-
+  - "$HOME/.m2"
 env:
-  - DOCKER_IMAGE=kemo93/rsopix:0.2
-
+  global:
+  - DOCKER_IMAGE=rsopix5/$MICROSERVICE-$DOCKER_IMAGE_TAG_ADDITIONAL:$VERSION-$TRAVIS_JOB_NUMBER
+  - DOCKER_IMAGE_KUBE=rsopix5/$MICROSERVICE-$DOCKER_IMAGE_TAG_ADDITIONAL:kube
+  - secure: d2aLvL//tm4WJA/wfBie3u4ctgbndjTMEKfJhrIKO6HgZKRpF48rnCf5QZ7xRfrWG7mYWNBRrb5iqqLow2RkzhY70ZcVS8smGgNwoSP7rtChK/P4VwJcdrZsY7/mmzuX1GLzQK1T86KDoTmmQHHCLGy1lNW1CeCOe5MUCj6CSefqaxBVsGtqSw83uTyk23NHwydTwGKA5/sBDZTa9nQZ9xrUI0LIIBo8jDObyZm8/nue9QBlLInfo0n4NVRbd1YGuRE3YsnInAnBLFBsn1w+OcoF8cxVJNYveW1m7rHzHH8yDTFvqy4Um/UIT3i2jYPLakx6Pverl5CWdrsW806A78WkD4wa677B0fBG+A9HyCUl8aTS0Rnon+oV0nOVP3BHKV06ZsQN1JI0D6a/yL6wYZQRCgS941u0DEyH6DdMza1r91VUsstIXFscbCaw4DOwdNFKquLR1gLMtcuOuBN2psR7tEst/Q97klbQpH1Gurtne2NPfEwHzeM4YmeWzdluMwdi40pnPSJjcEpZFzgb7MoG9XP44n0E1/0i3Mr+96bxrQ4EOhYSedHhgUGw2G321Tc/o6/G1Bq6+F5JKkISTDZo3JdYlSaejA1dkQbM1qmLSxJZ3t7PmjqvSsR8rpUEP7IOk+77VW+jbnuFkRnao1cgNw5xIleashY93lL+w8g=
+  - secure: w7YMYw7Xd41liCPCMvKocymfPuLH+zADZHKGQhiw425XsLy1GpKr8+Osj5AOLS5iooMeFJhYIT4xTZB/U/0ZaSayqZPluH8Ti0EQ3sTkfhMH/iCiB9JSHQgpJiQ0w/vWgObpMPbU3CQWQP4byBeUgEeRRzTG2aFV3NKltbPcCVxBSTI645AFOptEBkNA4hndUo3wBGcFsTg9mqPtjP7I6o4ghRUKTpM86KTq8+QMVhpOqYj5nk9UG+pzr09AlQDVOLlUqZGaOY6H0nLQChatm5A5KZ9yy2iwXJT3UWHlohh3B4oegPB8i3qqtMLCO7K1zoy22XXsGQrku5jPc8fL0+uuV6jm4+AP4VopMyLE8itdHo35pCvuyZ90XvUWJMZcdIQeAGu2kW1VcwHx2PyddK3yfGQWVdd9jziAW9V8FVHRseORM+ZQmUUn7HB0xfNWpj4p2m5bt9ssXatkpubY2h5HU+CukWMuJAJJJ1qAS+ibcIFhkCHw2uzC7aIcC+bNdkYKD2il7UZ+hfqcM+O2nMDFPrvKSkypLde+GzCkS4cD3sc4BTx/eDth8V4Yzd2YP070ZEa6+EEVpGjGhYy8WCt9BXLASQvH5/vXjeHs3NFQ78ZWpt8cJ0cSGee6EwJS0XL+rMxledEESsPIomFBFtXQyn1q4q88oAL/bcwfSIY=
+install:
+- prev="$PWD"
+- git clone -n https://github.com/RSOpix5/workspace.git --depth 1 /home/travis/build/RSOpix5/workspace
+- cd /home/travis/build/RSOpix5/workspace
+- git checkout HEAD pom.xml
+- mv -v pom.xml /home/travis/build/RSOpix5/pom.xml && echo "premaknil pom"
+- cd "$prev"
 script:
-  - mvn clean package -U
-  - docker build -t "$DOCKER_IMAGE" .
-
+- if [ $DOCKER_IMAGE_TAG_ADDITIONAL == "dev" ]; then mvn -P $MVN_PROFILE -f "/home/travis/build/RSOpix5/pom.xml" clean compile package; else mvn -P $MVN_PROFILE -f "/home/travis/build/RSOpix5/pom.xml" clean package -U; fi;
+- docker build -t "$DOCKER_IMAGE" .
 after_success:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push "$DOCKER_IMAGE"
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+- docker push "$DOCKER_IMAGE"
+- if [ ! -z "$(git tag -l kube --contains HEAD)" ]; then docker tag "$DOCKER_IMAGE" "$DOCKER_IMAGE_KUBE"; docker push "$DOCKER_IMAGE_KUBE"; fi;
+
+notifications:
+  email: false
+  

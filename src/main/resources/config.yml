@@ -1,0 +1,25 @@
+kumuluzee:
+  name: uploader-service
+  version: 1.0.0
+  env:
+    name: dev
+  config:
+    start-retry-delay-ms: 500
+    max-retry-delay-ms: 1000
+    etcd:
+      hosts: http://192.168.0.18:2379
+  server:
+    base-url: http://localhost:8080
+    http:
+      port: 8080
+
+  datasources:
+    - jndi-name: jdbc/SubmissionsDS
+      #connection-url: jdbc:postgresql://192.168.0.18:5432/submissions
+      connection-url: jdbc:postgresql://35.224.216.248/submissions
+      username: postgres
+      password: test
+      max-pool-size: 20
+uploader-config:
+  test: a
+  ime: kt

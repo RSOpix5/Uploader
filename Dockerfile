@@ -1,11 +1,7 @@
-FROM openjdk:8-jre-slim
-
+FROM openjdk:8-jdk-slim
 RUN mkdir /app
-
 WORKDIR /app
-
-ADD ./api/target/customers-api-1.0.0-SNAPSHOT.jar /app
-
-EXPOSE 8080 8443
-
-CMD java -jar customers-api-1.0.0-SNAPSHOT.jar
+ADD ./target/uploader-*.jar /app/uploader.jar
+ADD ./oauth/ouath.json /app/oauth.json
+EXPOSE 8080
+CMD ["java", "-jar", "uploader.jar"]

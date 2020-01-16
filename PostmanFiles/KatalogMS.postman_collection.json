@@ -1,0 +1,195 @@
+{
+	"info": {
+		"_postman_id": "626f309a-529f-429e-a640-62ae0a583c62",
+		"name": "Uploader",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "images",
+			"item": [
+				{
+					"name": "get images",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "936e99a4-15c9-4092-ad7f-1e358f95b046",
+								"exec": [
+									"pm.test(\"reponse is an array\", () => pm.expect(tv4.validate(data)))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/images",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get image by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "936e99a4-15c9-4092-ad7f-1e358f95b046",
+								"exec": [
+									"pm.test(\"reponse is an array\", () => pm.expect(tv4.validate(data)))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/images/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"images",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get images of album",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "936e99a4-15c9-4092-ad7f-1e358f95b046",
+								"exec": [
+									"pm.test(\"reponse is an array\", () => pm.expect(tv4.validate(data)))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/images?albumID=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"images"
+							],
+							"query": [
+								{
+									"key": "albumID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "albums",
+			"item": [
+				{
+					"name": "get albums",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "936e99a4-15c9-4092-ad7f-1e358f95b046",
+								"exec": [
+									"pm.test(\"reponse is an array\", () => pm.expect(tv4.validate(data)))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/albums",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get albums byAuthor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "936e99a4-15c9-4092-ad7f-1e358f95b046",
+								"exec": [
+									"pm.test(\"reponse is an array\", () => pm.expect(tv4.validate(data)))"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/v1/albums?authorID=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"v1",
+								"albums"
+							],
+							"query": [
+								{
+									"key": "authorID",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
